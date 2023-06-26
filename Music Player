@@ -1,0 +1,50 @@
+import UIKit
+import AVFoundation
+
+class MusicPlayerViewController: UIViewController, AVAudioPlayerDelegate {
+    var audioPlayer: AVAudioPlayer?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Specify the path of the music file
+        guard let musicURL = Bundle.main.url(forResource: "song", withExtension: "mp3") else {
+            print("Music file not found.")
+            return
+        }
+        
+        do {
+            // AVAudioPlayer nesnesini oluşturun
+            audioPlayer = try AVAudioPlayer(contentsOf: musicURL)
+            audioPlayer?.delegate = self
+            audioPlayer?.prepareToPlay()
+        } catch {
+            print("An error occurred while uploading the music file: \(error.localizedDescription)")
+        }
+    }
+    
+    // Playing the music
+    func playMusic() {
+        audioPlayer?.play()
+    }
+    
+    // Pause the music
+    func pauseMusic() {
+        audioPlayer?.pause()
+    }
+    
+    // Stop the music
+    func stopMusic() {
+        audioPlayer?.stop()
+        audioPlayer?.currentTime = 0
+    }
+    
+    // AVAudioPlayerDelegate method - Works when the music is complete
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        if flag {
+            print("Music complete.")
+        } else {
+            print("An error occurred while playing music.")
+        }
+    }
+}
